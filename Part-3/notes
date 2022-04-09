@@ -1,0 +1,23 @@
+More on special characters
+[[ ]] : Evaluation of expression for True or False. Also used for comparing strings.
+! : Used to reverse a test.
+>, >>, < : Redirection a commands output or input to a file.
+| : Pipe, Send a commands ouput as input to next command. (Chaining commands).
+; : Command seperator.
+{ } : Inline grouping. Commands inside curly branckets are treated as one command.
+( ) : Commands are groups as in { } but are executed in a new process). 
+(( )) : Arithmetic expression. Used in variable assignment and mathematical value comparison.
+$(( )): As (( )) but expression is replaced with mathematical evaluation.
+*.? : Wildcard.
+~ : Home directory.
+& : Background - Do not wait for the command to complete. Send it to background
+
+Example:
+$ echo $(( 4 + 8 ))
+12
+
+$ (( 5 > 3 )) && echo "5 is greater than 3."
+
+What special chars not to use anymore!
+
+
