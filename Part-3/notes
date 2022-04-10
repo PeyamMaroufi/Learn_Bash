@@ -54,6 +54,16 @@ rm: user.txt: No such file or directory
 This happend because the substitution occurs first and then the removing. What should I do instead?
 $ rm "$my_file"
 
+# Special Parameter and Variables
+$0 : Script path
+$1 , $2 , .. : Positioned arguments
+$@ : All words in all positioned arguments
+$# : Number of positional arguments
+$? : Exit code of the command
+$$ : PID of the current shell.
+$! : PID of the most recent executed in the background.
+$_ : Last argument of the last command.
 
-
+Other variables
+BASH_VERSION, HOSTNAME, PPID, PWD, RANDOM, UID, COLUMNS, LINES, HOME, PATH, PS1, TMPDIR
 
