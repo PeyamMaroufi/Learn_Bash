@@ -1,0 +1,69 @@
+# More on special characters
+[[ ]] : Evaluation of expression for True or False. Also used for comparing strings.
+! : Used to reverse a test.
+>, >>, < : Redirection a commands output or input to a file.
+| : Pipe, Send a commands ouput as input to next command. (Chaining commands).
+; : Command seperator.
+{ } : Inline grouping. Commands inside curly branckets are treated as one command.
+( ) : Commands are groups as in { } but are executed in a new process). 
+(( )) : Arithmetic expression. Used in variable assignment and mathematical value comparison.
+$(( )): As (( )) but expression is replaced with mathematical evaluation.
+*.? : Wildcard.
+~ : Home directory.
+& : Background - Do not wait for the command to complete. Send it to background
+
+# Example:
+$ echo $(( 4 + 8 ))
+12
+
+$ (( 5 > 3 )) && echo "5 is greater than 3."
+
+# What special chars not to use anymore!
+`` : Don't use this. use $( ) instead
+[ ]: Mostly used in POSIX shell. use [[ ]]
+$[ ]: Use $(( )) instead.
+
+# Paramters
+There are two flavors of parameter: variables and special parameters.
+Variables: You created and update them yourself. They start with a letter ot an underscore. The name of a variable is also known as Identifier.
+Special parameters: Read-only and pre-set by Bash.
+
+# Variable assignment
+my_variable=2 # Assing value 2 to my_variable
+my_variable = 2 # Error! No space between equal sign and its neighbours should exist.
+Why doesn't my_variable = 2 work? bc Bash treat  "my_variable" as command and not as a variable name. 
+
+# More about variables
+There is something special with Bash or shell scripting programs.
+$ my_variable="Payam is awesome."
+$ echo $my_variable
+Payam is awesome.
+
+The step for executing the above code are:
+1. Assign the value to a variable
+2. In 'echo $my_variable' substiture the variable with its value to: echo Payam is awesome
+3. Execute the echo command with its arguments (arguments are Payam is awesome.
+
+So the substitution happens before the execution. This is very important to know.
+
+$ my_file="Hello dear user.txt"
+$ rm $my_file
+rm: Hello: No such file or directory
+rm: dear: No such file or directory
+rm: user.txt: No such file or directory
+This happend because the substitution occurs first and then the removing. What should I do instead?
+$ rm "$my_file"
+
+# Special Parameter and Variables
+$0 : Script path
+$1 , $2 , .. : Positioned arguments
+$@ : All words in all positioned arguments
+$# : Number of positional arguments
+$? : Exit code of the command
+$$ : PID of the current shell.
+$! : PID of the most recent executed in the background.
+$_ : Last argument of the last command.
+
+Other variables
+BASH_VERSION, HOSTNAME, PPID, PWD, RANDOM, UID, COLUMNS, LINES, HOME, PATH, PS1, TMPDIR
+
