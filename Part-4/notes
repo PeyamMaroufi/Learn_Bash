@@ -1,0 +1,49 @@
+# Parameter Expansion
+Parameter expansion means any operation that causes a parameter to be replaced by its content. Simply add $ sign to a variable.
+$ echo "$RANDOM is a random number" # RANDOM is a pre-set variable in bash generating a random integer.
+16568 is a random number
+
+Sometime you need to have a curly braces. Here is the reason.
+$ echo "$RANDOMs ${RANDOM}s"
+32224s
+
+What you see is that when you don't put the curly braces Bash thinks you mean another variable name. $RANDOMs variable does not exist.
+
+Parameter expansion is very useful when using loops. More on that later.
+
+# Parameter Expansion Tricks
+The followings are some useful PE (Parameter Expansion) that can come to use in your scripting.
+${param:-Payam} # If param is unset/null, substitute with of Payam. Otherwise substitute.
+${param:=Payam} # If param is unset/null, assign Payam to param.
+${param:+Payam} # If param is unset/null, nothing is substituted, otherwise 'Payam'.
+${#param} # Length of param.
+${param#pattern} # Find pattern in the begining of param and remove it otherwise do nothing.
+${param##pattern} # As above but remove the longest match.
+${param%pattern} # As above but look the end of param.
+${param/pattern/string} # Look for pattern in param and replace it with string.
+${param//pattern/string} # Look for pattern in param but replace every match with string.
+${param/#pattern/string} # Look for pattern in the beginning of param and replace it with string.
+...
+
+# Example
+$ my_string="Hi, How are you studing? How is it?"
+$ echo ${my_string/How/What}
+Hi What are you studing, How is it?
+
+$ echo ${my_string//How/What}
+Hi What are you studing, What is it?
+
+$ my_string="(This) is not what you are thinking [period]"
+$ echo ${my_string/#(*)/[That]}
+[That] it not what you are thinking [period]
+
+$ echo ${my_string/%\[*\]/(kidding) # Use \[ instead of [ since [ is special in Bash.
+(this) it not what you are thinking (kidding)
+
+$ variable="(this) it not what you are thinking [I hope] [period]"
+$ echo ${variable##*\[} # Greedy remove everything before [ and echo it.
+period]
+
+$ echo ${variable#*\[} # Remove everything before first [ and echo it.
+I hope] [period]
+
