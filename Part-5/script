@@ -1,0 +1,29 @@
+#! /bin/bash
+touch "a b.txt" "Payam is awesome.jpg"
+
+echo "First for loop with ls\n"
+for file in `ls`; do echo "$file"; done
+
+echo "Second for loop with *"
+for file in *;do echo "$file"; done
+
+echo "Comparison inside for loop"
+for file in *; do
+	if [[ $file = *.jpg ]]; then
+		echo "$file is a jpg file"
+	fi
+done
+
+shopt -s extglob
+touch "name.txt" "response.json" "image.png" "image.jpg" "bash_stuff.csv" "names.txt" "dates.txt"
+
+echo "Using !(list)."
+echo !(*.txt|*.jpg)
+
+echo -e  "\nUsing @(list)."
+echo @(*.txt|*.jpg)
+
+echo -e "\nUsing +(list)."
+echo +(*.txt|*.jpg)
+
+

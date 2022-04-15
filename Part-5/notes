@@ -1,0 +1,88 @@
+# Patterns
+Above version 3.0 Bash supports also regular expressions. RE is mostly used in scripts.
+In bash we usually use globs. Those are not REs but they have some similarities. When dealing with file names and string they are a very convinient.
+Let remember these:
+* : Matches any string
+? : Matches any sinle char
+[...] : Matches any one of the chars in side the brackets.
+
+Example:
+if strings are : animal, cats, awesome, linkedin, payam
+then a* will match animal, awesome only. Since a* looks at the pattern from the beginning of the word.
+
+# Example with ls
+Let's create a text file called: Payam is awesome
+$ touch "Payam is awesome.txt" # the argument is in double qoute.
+$ ls
+'Payam is awesome.txt'
+$ for file in `ls`; do echo "$file"; done
+Payam
+is
+awesome.txt
+$ for file in *; do echo "$file"; done
+Payam is awesome.txt
+
+As you see the formatting that ls prints out would lead to problem when dealing with more complicated scenarios.
+
+# Example Cont.
+Comparison
+my_file="Payam is awesome.jpg"
+if [[ $my_file = *.jpg ]]; then
+	echo "$my_file is a jpg file"
+fi
+
+touch "Payam is awesome.txt" "Payam is awesome.jpg"
+for file in *; do
+	if [[ $file = *.jpg ]]; then # We will talk about if statements later
+		echo "$file is a jpg file."
+	fi
+done
+
+# Extended Globs
+Extended globes are like regular expression but the syntax is a little different. By default this feature is disabled. Use shopt to toggle it on in your script.
+$ shopt -s extglob # shopt is a short form of Shell Options
+
+?(list): Matches zero or one match of the patterns.
+*(list): Matches zero or more matches of the patterns.
++(list): Matches one of more matches of the patterns.
+@(list): Matches one match of the patterns.
+!(list): Matches anything but the patterns.
+
+Examples:
+
+$ touch "name.txt" "response.json" "image.png" "image.jpg" "bash_stuff.csv" "names.txt" "dates.txt"
+$ echo "Using !(list)."
+Using !(list).
+$ echo !(*.txt|*.jpg)
+bash_stuff.csv image.png
+
+$ echo "Using @(list)."
+Using @(list).
+$ echo @(*.txt|*.jpg)
+dates.txt image.jpg names.txt name.txt
+
+$ echo "Using +(list)."
+Using +(list).
+$ echo +(*.txt|*.csv)
+dates.txt image.jpg names.txt name.txt
+
+# Regular Expressions
+RE can be used for pattern matching, not for filename matching. You can use the =~ operator to the [[ keyword. When a match is occured then a zero exit code is returned. When no match is found exit code 1 is returned and when the syntax is wrong then exit code 2 is returned. In Bash zero exit code means true, and other means false.
+
+# Brace Expansions
+Is used to get the permutation of their contents.
+$ echo P{a,e,u}yam
+Payam Peyam Puyam
+
+$ echo P{a,e,u}y{a,e,u}m
+Payam Payem Payum Peyam Peyem Peyum Puyam Puyem Puyum
+
+$ echo {1..11}
+1 2 3 4 5 6 7 8 9 10 11
+
+$ echo {a..u}
+a b c d e f g h i j k l m n o p q r s t u
+
+$ echo {10..-1}
+10 9 8 7 6 5 4 3 2 1 0 -1
+
