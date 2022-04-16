@@ -1,0 +1,64 @@
+# Exit Status
+Every command, when it is done, it will return a exist status code. It is an integer between 0-255. 0 according to the convention is set to denote success. Every other integer returned by the application is specific to that application. However, many application try to have same exit status for same behaviour.
+
+Example
+$ curl dummy_text
+curl: (6) Could not resolve host: dummy_text
+
+$ echo $?
+6
+
+It is always a good practice to explicitly return a exit status. It has saved me a lot of work when dealing with CI and runners.
+
+Example
+
+$ cd my_directory || { echo 'Could not find the directory!' >&2; exit 1} # {} is a inline grouping. Look lesson 3.
+
+# Control Operators 
+&& and || are easier to understand when you know about exit status. && is the logical AND and || is the logical OR.
+
+Example
+$ mkdir -p my_direcotyr/second_dir && echo "Created parent and child directory"
+
+In the example above the command after && is executed only if the left hand side commands are executed successfully.
+Question:
+"Could I use a semicolon separator between commands instead?"
+
+Let's assume that we are in a directory in which no file exists.
+$ rm non_existing_file.txt; echo "What happened?"
+rm: cannot remove 'non_existing_file.txt': No such file or directory
+What happened?
+As you see the commands are executed sequentially regardless of the exit status.
+
+A || B indicates that if command A fails then execute B.
+
+Example
+$ touch a b
+$ rm c || echo "Could not delete."
+rm: cannot remove 'c': No such file or directory
+Could not delete.
+
+$ rm a b || echo "Could not delete."
+
+# Grouping statements and Exit status
+Sometimes you may have more complicated statements. Not always you want to do a `rm` and check for its exit status. Let's assume that we want to remove a file that contains the word "good" but not "bad".
+
+$ grep -q "good" "$file" && ! grep -q "bad" "$file" && rm "$file"
+
+In the example above we use the -q flag of grep which puts grep into quit mode so no outputs are printed to the terminal. Let's break it into pieces.
+$ grep -q "good" "$file" 
+if the file contains the word good. Return a 0 exit status.
+
+$ ! grep -q "bad" "$file" 
+if the file contains the word bad, the command after ! will return 0 and the whole command returns 1.
+
+&& indicates that each command should return a zero exit status.
+
+Let's make the command chain more complicated. We want now to know to be informed if the file by some reason could not be removed.
+$ grep -q "good" "$file" && ! grep -q "bad" "$file" && rm "$file" || echo "Could not delete $file" >&2
+
+This code is not entirely correct. If the first grep fails we never tried to delete the file. This is misleading. Let's correct the code to:
+$ grep -q "good" "$file" && ! grep -q "bad" "$file" && { rm "$file" || echo "Could not remove $file" >&2; }
+
+>&2 is standard error. Close the curly brace by ";".
+
