@@ -36,5 +36,7 @@ A tricky example
 $ name="Linkedin user" secondname="Payam Maroufi"
 $ [ $name = $secondname ]
 Will this work? No. Multiple time in this series we noted that reaching variables without " " splits the variable value. so $name is actually Linked and user and not "Linkedin user". so the `[` command gets 2 arguments only for $name , the equal sign and two for $secondname and lastly the `]`. in total of 6 arguments.
-:
 
+You don't need to have a if statement everytime you want to test something. For instance:
+$ a=10 b=10
+$ [ $a = $b ] && echo "a and b are equal"
