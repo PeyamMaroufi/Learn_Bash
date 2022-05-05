@@ -1,0 +1,42 @@
+# Conditional blocks
+Like many other script/programming languages, Bash also implement the 'if' statement. When the condition specified by 'if' is fulfilled then a block of code below it will be executed.
+Example
+if (( 1 == 1 ))
+then
+	echo "1 is 1. Duh!!"
+fi
+
+There are other styles of writing the same if statement. Following the example above. We could also write:
+if (( 1 == 1 ))
+then echo "1 is 1. Duh!!"
+fi
+
+if (( 1 == 1 )); then
+	echo "1 is 1. Duh!"
+fi
+
+This one is wrong. Do you know why?
+if (( 1 == 1 )); then echo "1 is 1. Duh!" fi
+
+The reason why it wrong is the 'fi' word at the end. 'echo' believes that it is a string that you want to print out. Hence we want bash to know that 'fi' is closing the if block. So right after our sentence "1 is ..." we should add a semicolon;
+Correct
+if (( 1 == 1 )); then echo "1 is 1. Duh!!"; fi
+
+# [ ]
+`[]` or test is a command that reads it arguments and do some checks. `[[` is like `[` but has much more versatility. To use `[` you don't need a `if` keyword. Take a look at a very simple example.
+
+$ if [ x = y ]
+> then echo "x is the same as y."
+> else echo "x and y are not the same."
+> fi
+
+Taking a look at the first line you see that `[` takes three arguments. `x`, `=`, `y`. If the strings are the same we enter the second line otherwise the third and we exit the if block after the fi keyword. To grab from here is that the `[` takes 3 argumentsplus the closing bracet `]`.
+
+A tricky example
+$ name="Linkedin user" secondname="Payam Maroufi"
+$ [ $name = $secondname ]
+Will this work? No. Multiple time in this series we noted that reaching variables without " " splits the variable value. so $name is actually Linked and user and not "Linkedin user". so the `[` command gets 2 arguments only for $name , the equal sign and two for $secondname and lastly the `]`. in total of 6 arguments.
+
+You don't need to have a if statement everytime you want to test something. For instance:
+$ a=10 b=10
+$ [ $a = $b ] && echo "a and b are equal"
