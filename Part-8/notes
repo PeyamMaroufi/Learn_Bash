@@ -1,0 +1,30 @@
+Let's continue with test command or []. Let's run the following example:
+
+touch a.txt b.txt c.txt
+for item in *
+do
+    echo "$item"
+    if [ "$item" = *.txt ]
+    then 
+        rm "$item"
+    fi
+done
+
+Will this code work?
+
+No! As mentioned in lesson 7 the test or [ can not command more than 3 arguments plus the closing bracket. Let's look at the command we wrote. [ "$item" = *.txt ]. So "$item" is the first argument, = is the second argument, how about *.txt? Well it matches with all files that ends with .txt which in this case are a.txt b.txt and c.txt. So there is no way this is only one argument. This is the drawback of using [ . 
+If we have the same arguments but this time use [[ instead:
+
+touch a.txt b.txt c.txt
+for item in *
+do
+    echo "$item"
+    if [[ "$item" = *.txt ]]
+        rm "$item"
+    fi
+
+done
+
+It does remove all the created file. What we learn here is that one of the differences between [ and [[ is the pattern matching that comes with [[.
+
+

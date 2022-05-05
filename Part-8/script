@@ -1,0 +1,20 @@
+#! /bin/bash
+touch a.txt b.txt c.txt
+for item in *
+do
+    echo "$item" 
+    if [ "$item" = *.txt ]
+    then
+        rm "$item"
+    fi
+done
+
+for item in *
+do 
+    echo "$item"
+    if [[ "$item" == *.txt ]]
+    then
+        rm "$item"
+    fi
+done
+
