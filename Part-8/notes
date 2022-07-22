@@ -27,4 +27,46 @@ done
 
 It does remove all the created file. What we learn here is that one of the differences between [ and [[ is the pattern matching that comes with [[.
 
+We do if statement to control the flow of execution when a condition is fullfiled. ">" and "<" have special meanings in bash. what does the following statement do?
 
+if [ payam > something_else ]; then
+    echo "Payam is greates than something else."
+fi
+
+You may think I am comparing payam and something_else which is wrong. Here I am saying that put the stdout of payam to something_else. If payam is something that doesn't exist then you will get an error. But if you insist in doing string comparison with [ then escape the signs with a backslash. In the example below you want to find out whether "812" comes before "9". You see that the comparison is done lexigographically here.
+
+if [ "632" \< "9" ]; then
+    echo "yes 632 is smaller than 9"
+else
+    echo "No. 632 us not smaller than 9"
+fi
+
+
+So how would you compare two integers?
+For that porpuse use '-eq', '-ne', '-lt', '-gt', '-le', '-ge'
+if [ "632" -ge "9" ]; then
+    echo "632 is greater than 9"
+fi
+
+If you still insist in using >, <, =>, <= etc, then I recommend you to use [[ instead of [. 
+
+Most common tests supported by [ and [[:
+    -e file # if the file exists.
+    -d file # if the file is a directory.
+    -h file # if the file is symbolic link.
+    -s file # if the file exists and is not empty.
+    -w file # if the file is writable by you.
+    file1 -nt file2 # if file1 is newer than file2.
+    -z string # if the length of string is zero.
+    -n string # if the length of string is not zero.
+
+Most common tests supported by [[:
+    string =(or ==) pattern # pattern matching.
+    string != pattern # the opposite of above.
+    string =~ regex_pattern # comparison using regex.
+    ...
+
+Tests only by [:
+    expression1 -a expression2 # logical AND instead of if [ expression1 ] && [ expression2 ]
+    expression1 -o expression2 # logical OR instead of if [ expression1 ] || [ expression2 ]
+    
