@@ -1,0 +1,17 @@
+#! /bin/bash
+touch "my name is payam.txt" a.txt b.txt
+for file in *.txt
+do
+	echo "${file}"
+	rm "${file}"
+done
+
+touch "my name is payam.txt" a.txt b.txt
+for file in *
+do
+	if [[ "${file}" = *.txt ]]; then
+		echo "${file}"
+		rm "${file}"
+	fi
+done
+
