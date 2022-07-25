@@ -1,0 +1,101 @@
+In Part 8 we learned the differences between the commands [ and [[. We also conclude that the smartest way of performing conditional statements is to use [[ over [. Since [ is not Bash and is very limited and sometimes confusing.
+
+Let's go through the conditional loops. Loops are used to repeat a logic over and over again. Let's cover three kinds of loops in bash.
+* while command 		- Loops as long as a command is successful.
+* until command 		- Loops as long as a command is unsuccessful.
+* for item  in items  	- Loops for each element in in items.
+
+
+While loop
+The syntax for performing a while loops is:
+
+while (( expression ))
+do
+		command
+done
+
+Let's look at some examples.
+
+while true
+do
+		echo "This is an infinite loop."
+done
+
+i=10
+while (( i < 15 ))
+do
+	echo "i = ${i}."
+	(( i++ ))
+done
+
+i = 10.
+i = 11.
+i = 12.
+i = 13.
+i = 14.
+
+For loop
+The general structure of a for loops is.
+
+for (( expression1; expression2; expression3 ))
+do
+	command
+done
+
+Let's take some examples:
+for (( i=10; i < 15; i++ ))
+do
+	echo "i = ${i}."
+done
+
+i = 10.
+i = 11.
+i = 12.
+i = 13.
+i = 14.
+
+for i in {1..5}
+do
+	echo "i = $i."
+done
+
+i = 1.
+i = 2.
+i = 3.
+i = 4.
+i = 5.
+
+Let's now go through a mistake that many bash scripters do.
+
+for f in $(ls *.txt)
+do
+	rm "$f"
+done
+
+So what this code basically wants to do is to remove all .txt files. Why is this a mistake? Because if there is a text file called "this is my text file.txt" $(ls *.txt) will split it in five pieces: "this", "is", "my", "text", "file.txt", 
+
+So how do you solve that? Well there are multiple ways. I know two.
+
+for f in *.txt
+do
+	rm "$f"
+done
+
+or
+
+for f in *
+do
+	if [[ "$f" = *.txt ]]; then
+		rm "$f"
+	fi
+done
+
+Until command
+As while but while the expression is not successful. It is the same as:
+
+while ! expression
+do
+	command
+done
+
+until is barely used but don't get surprised when you see it. 
