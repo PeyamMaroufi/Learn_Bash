@@ -1,0 +1,71 @@
+Part 10
+Let's say that we want to perform different operations on files based on their extension type. Take a look at the example below.
+
+touch a.txt a.sh b.png c.cc d.jpeg e.bla
+for file in *
+do
+	if [[ "$file" = *.txt ]]; then
+		echo "$file is a text file."
+	elif [[ "$file" = *.png ]]; then
+		echo "$file is a png file."
+	elif [[ "$file" = *.sh]]; then
+		echo "$file is a shell file."
+	elif [[ "$file" = *.cc]]; then
+		echo "$file is a cc file."
+	elif [[ "$file" = *.jpeg]]; then
+		echo "$file is a jpeg file."
+	else
+		echo "$file has a strange extension."
+	fi
+done
+
+Not so intuitive right?
+
+Case
+So let's do the same thing this time with a Case statement. 
+
+touch a.txt a.sh b.png c.cc d.jpeg e.bla
+for file in *
+do
+	case $file in
+		*.txt) echo "$file is a text file." ;;
+		*.png) echo "$file is a png file." ;;
+		*.sh) echo "$file is a shell script." ;;
+		*.jpeg|*.cc) echo "$file is a jpeg file or a .cc file." ;; 
+		*) echo "$file has a strange extension." ;;
+	esac
+
+You see that we use | to have a list of patterns there. You can also break a statement by using break keyword. I leave it to you to explore.
+
+Arrays
+There are multiple ways of creating arrays. The simple ways is to place your elements inside parenthesis without any comma or points.
+
+coworkers=("Cihan" "Johan" "Vignesh" "Josef" "Jayasree" "Saujanya")
+
+You can also explicitly give them indexes and one thing that Bash allows is that indexes don't need to be sequential.
+
+coworkers=([0]="Cihan" [1]="Cihan" [30]="Vignesh" [34]="Josef" [40]="Jayasree" [50]="Saujanya")
+
+How would you print out the element with index 0?
+
+echo $coworkers[0] # ?
+
+Do you remember "word split" in bash and shell? The code above will echo "Cihan[0]" because you have not enclosed the array. Do the following instead.
+
+echo "${coworkers[0]}"
+Cihan
+echo "${coworkers[30]}"
+Vignesh
+
+If you want to echo all the elements in the array:
+echo "${coworkers[@]}"
+
+If you don't provide indexes explicitly bash will give each element an index.
+
+How do I get an array of existing files in a directory called directory?
+a) files=($(ls))
+b) files=$(ls)
+c) files=(*)
+
+Correct answer is c). Please do not use ls to create an array of file names. It will not create a list of elements. It will put all its output into one element of array. Also ls will split the names if there is a space in the file name.
+

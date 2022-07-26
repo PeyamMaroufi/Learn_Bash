@@ -1,0 +1,41 @@
+#! /bin/bash
+
+touch a.txt a.sh b.png c.cc d.jpeg e.bla
+for file in *
+do
+	if [[ "$file" = *.txt ]]; then
+		echo "$file is a text file."
+	elif [[ "$file" = *.png ]]; then
+		echo "$file is a png file."
+	elif [[ "$file" = *.sh ]]; then
+		echo "$file is a shell file."
+	elif [[ "$file" = *.cc ]]; then
+		echo "$file is a cc file."
+	elif [[ "$file" = *.jpeg ]]; then
+		echo "$file is a jpeg file."
+	else
+		echo "$file has a strange extension."
+	fi
+done
+
+rm a.txt a.sh b.png c.cc d.jpeg e.bla
+
+echo "----------------------------------"
+
+touch a.txt a.sh b.png c.cc d.jpeg e.bla
+for file in *
+do
+	case $file in
+		*.txt) echo "$file is a text file." ;;
+		*.png) echo "$file is a png file." ;;
+		*.sh) echo "$file is a shell script." ; break ;;
+		*.jpeg|*.cc) echo "$file is a jpeg file or a cc file." ;;
+		*) echo "$file has a strange extension." ;;
+	esac
+done
+rm a.txt a.sh b.png c.cc d.jpeg e.bla
+
+coworkers=([0]="Cihan" [1]="Cihan" [30]="Vignesh" [34]="Josef" [40]="Jayasree" [50]="Saujanya")
+
+echo "${coworkers[0]}"
+
