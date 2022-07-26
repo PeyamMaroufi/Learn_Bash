@@ -1,0 +1,9 @@
+#! /bin/bash
+
+firstnames=(Payam Cihan Vignesh Johan)
+lastnames=(Maroufi Simsek Kuna Goransson)
+for index in "${!firstnames[@]}"
+do
+	echo "Firstname: ${firstnames[index]}, Lastname: ${lastnames[index]}"
+done
+

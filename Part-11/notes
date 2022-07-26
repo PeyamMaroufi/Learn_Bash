@@ -1,0 +1,72 @@
+Using Arrays in Bash
+Let's say that we have the following array.
+$ files=(*)
+$ declare -p files
+declare -a files=([0]="Desktop" [1]="Documents" [2]="Downloads" [3]="Dropbox" [4]="Music" [5]="Pictures" [6]="Public" [7]="Templates" [8]="Videos")
+
+First lines creates an array of the files inside the current directory. If I want to know how bash wants me to save that array I can use declare -p file. It prints out the content of the array files. -a in the output tells you that this is an array.
+
+I can also  use the printf command.
+$ printf '%s\n' "${files[@]}"
+Desktop
+Documents
+Downloads
+Music
+Pictures
+Public
+Templates
+Videos
+
+Looping through elements without array
+You can also loop through a list of elements directly. 
+for file in "name.txt" "payam.png" "logo.gif"
+do
+	echo "$file"
+done
+
+Let's create an array again.
+files=("name.txt" "payam.png" "logo.gif")
+
+You can use this array everywhere you want. Let's create those files.
+touch "${files[@]}"
+
+BUT! Some commands actually loop through the arrays by themselves. 
+printf '%s\n' "${files[@]}"
+
+printf loops through the array and prints them out.
+
+If you want to convert the whole array to a single string then
+echo "${files[*]}" # [*] converts the whole array to one single string.
+
+Working with indices
+Let's say we have the following two arrays and we want to print each first name with its last name given that those have the same indices in the arrays.
+
+firstnames=(Payam Cihan Vignesh Johan)
+lastnames=(Maroufi Simsek Kuna Goransson)
+
+Our strategy is to use the indices of the elements instead of they actual value. For this we use "${!array[@]}".
+
+for index in "${!firstnames[@]}"
+do
+	echo "Firstname: ${firstnames[index]}, Lastname: ${lastnames[index]}"
+done
+
+Recreating a non sequential indexed array
+You probably remember that you can create an array and explicitly give its elements a index. You might want to have sequential indices when looping through the array.
+
+$ firstnames=([0]=Payam [1]=Cihan [12]=Vignesh [24]=Johan)
+$ declare -p firstnames
+declare -a firstnames=([0]=Payam [1]=Cihan [12]=Vignesh [24]=Johan)
+
+$ firstnames=("${firstnames[@]}")
+$ declare -p firstnames
+declare -a firstnames=([0]=Payam [1]=Cihan [2]=Vignesh [3]=Johan)
+
+Associative Arrays
+Associative arrays remind me a lot about dictionaries. Not a long time ago you could only use positive integers as indices. Now since Bash 4.0 you can actually use words as indices. declare the array with 'declare -A arrays_name'
+
+declare -A users
+users=( ["firstname"]="Payam" ["lastname"]="Maroufi" )
+echo "First name of user is: ${users[firstname]}.
+echo "Last name of user is: ${users[lastname]}.
+
