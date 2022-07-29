@@ -1,0 +1,39 @@
+Input and Outputs
+You already have been in touch with arguments. For instance:
+
+$ cd /home/user/Downloads
+
+cd is the command and the argument you pass to it is the path to change your current directory to.
+However, you might want to create your own script in which the user has to insert a string, a number etc. How do you get those arguments in your script. Well the first positional argument is referred to as $1, the second one as $2 and so on. After the 9th argument you have to have curly braces such as ${10} or ${11}. You should know the reason by now if you have followed the series. The reason is to avoid word splitting. If you want to refer to all positional parameter you have to use "$@". Do absolutely not forget to have the double quotes. Otherwise you will face word splitting and globbing.
+Sometimes, especially when you want to have the user's input in a switch you want to eliminate the argument that is used. For this you use the shift command. When you use shift command the first parameter $1 is thrown away and the second parameter becomes $1. 
+
+Environment
+Setting environment variable is very common. There are already defined environment variable that you can use such as PATH HOME etc. But why would you need to have environment variables. Let's assume that you have a default editor for some types of files. You want the applications to remember what your default editor is without having you to set it manually each time. If the default editor is set with a environment variable then there is no need for that. The application already knows that. Environment variables are commonly defined in capital letters. If you define your own environment variables you won't need to worry about any conflicts. To see the environment variables on you system do:
+
+$ printenv
+
+If you want to see the value of a environment variable you can simply do:
+$ printenv HOME
+This will print the content of HOME. Some people like to write:
+$ echo $HOME
+
+I think this is too many finger movements on your keyboard. But that is a matter of taste.
+If you want to see all shell variables and shell functions you can type the following in your terminal window:
+$ set # You can also use this to set a environment variable.
+
+If you want to put information into the environment for you child processes to inherit then you simply export it as following.
+
+export YOURVAR=value
+Remember that here we mean child processes i.e this variables are set for the descendants. You can not set a variable for a application that is already running or a program that you don't run. A script that changes a environment and then running some other command is commonly known as WrapperScript.
+
+FDs
+DF or File Descriptors are the way programs refer to files and resource. Every program starts with 3 FDs:
+* Standard Input (stdin): File descriptor 0.
+* Standard Output (stdout): File descriptor 1.
+* Standard Error (stderr): File descriptor 2.
+stdin is how bash sees the chars you type on your keyboard.
+stdout is where the program sends its normal information so that user can see it.
+sterr is where the program sends its error messages.
+
+Many applications that have a graphical user interface do not use or work with these FDs, they usually do all their user interaction via the user interface. Still there are many terminal application that  work with FDs.
+
