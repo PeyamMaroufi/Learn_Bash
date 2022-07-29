@@ -37,3 +37,18 @@ sterr is where the program sends its error messages.
 
 Many applications that have a graphical user interface do not use or work with these FDs, they usually do all their user interaction via the user interface. Still there are many terminal application that  work with FDs.
 
+Example:
+$ read -p "What is your name: " name; echo "Good morning $name."
+What is your name: Payam
+Good morning Payam.
+
+Command read reads information from stdin and store it. It later on lets echo  do its job. echo sends its output to stdout.
+
+$ cd crazystuff
+bash: cd: crazystuff: No such file or directory
+
+As you see a error message is printed.
+
+It is a common practice to send custom error messages to stderr. Let me show you a quick way.
+
+echo "Something went wrong with this script" >&2 
