@@ -1,0 +1,15 @@
+#! /bin/bash
+echo "It is still summer" > file.txt
+cat < file.txt
+ls
+rm file.txt
+
+
+for h in "www.google.se" "blabla" "www.linkedin.com"
+do
+	curl "$h"
+done 2> info.txt
+cat < info.txt
+
+rm info.txt
+
