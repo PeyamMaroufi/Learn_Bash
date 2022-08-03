@@ -1,0 +1,79 @@
+Redirection
+Changing a DF to read its input from, or send it to a different locations is called Redirection.
+Let's see an example.
+$ echo "It is still summer" > file.txt
+It simply says "put the stdout of echo to the file.txt file". So technically > changes the destination of stdout to a file. This redirection executes before the echo command  is executed. > does not looks if the file exists. It only opens the file and all its old content is lost. Also remember that this redirection only applies to the echo command here and if there were other commands they would still send their stdout to the script's stdout location. 
+
+One very common mistake
+Please do not use cat to pipe files to commands in your scripts. It will create a new process and cat is not meant to be used that way. cat is used to concatenate file together. Instead use redirection to pass files to commands. Let me show you what I mean. Running cat alone in a terminal is a good way to understand stdin and stdout.
+
+$ cat
+
+If you type this in your terminal window nothing will happen. cat is still waiting for its stdin. If I write something like "Payam is awesome" then the stdin of cat is the same text and since cat shows its stdout directly in the terminal window I will get the same text again.
+
+$ cat
+Payam is awesome.
+Payam is awesome.
+
+Let's go back to not redirect stuff. Earlier we create a file.txt. Let's pass it to cat as source of stdin.
+$ cat < file.txt
+It is still summer
+
+Now we remind ourselves about the FDs.
+
+* cmd > file # send stdout to file.
+* cmd 1> file # send stdout to file. 1> is default in > so you don't really need to have it there.
+* cmd < file # use file as stdin to the cmd.
+* cmd 0< file # use file as stdin to the cmd as above.
+
+Reminder! When redirecting to a file, the file is created first then command is executed.
+
+Let's try to curl to fictive hosts.
+
+for h in "www.google.se" "blabla" "www.linkedin.com"
+do
+	curl "$h"
+done 2> info.txt # This is something special with this. Keep reading!
+
+Now if we do a cat < info.txt we get:
+curl: (6) Could not resolve host: blablabl
+
+If you don't want the user getting bothered possible errors, do as many script writers do:
+
+for h in "www.google.se" "blabla" "www.linkedin.com"
+do
+	curl "$h"
+done 2> /dev/null
+
+/dev/null is known by many people as bit bucket. It is a virtual device that is always empty.
+
+Keep Writing
+As we said earlier every time you redirect FDs > will open a new file and the old content is lost. What  if we run our loop twice? To keep the old content and add new one to the end of file use >> instead.
+
+for h in "www.google.se" "blabla" "www.linkedin.com"
+do
+	curl "$h"
+done 2>> info.txt
+
+CAT and GREP
+Two very misunderstood commands. Once by some reason people want to read a file's content and then pipe it grep. No one knows why. By I believe people take cat as "read the file" and grep as "find the pattern". This is completely unnecessary and just wrong usage of these two commands. If you want to look for a word or pattern you only need to use the grep command. Let's say that I have a file in my current directory containing the word "hello". If I want to look for it I only need to do a 
+
+$ grep "hello" my_file
+
+Most versions of grep have a -r flag by which you can look through a directory.
+
+$ grep -r "hello" .
+$ grep "$PATH" my_first_file my_second_file
+
+Multiple FDs simultaneously
+
+Writing to same file at the same time may lead to difficulties. See the code below
+
+$ echo "my name is Payam and I am awesome... Sometimes" > file
+$ grep "awesome" file 'non existing file' > mylog.txt 2> mylog.txt
+
+You see that I am trying to do it so catch the stdout to mylog.txt and the stderr to mylog.txt. What do you think will happen? The content of mylog.txt will just look strange. In some systems you only see the stderr and in some incomplete combination of both. This due to the fact that FDs try at same time to write to same file.
+
+To solve this problem we make use of duplicate FDs. A solution to this in which the order is important is.
+$ grep "awesome" file 'non existing file' &> mylog.txt # Not portable to BourneShell.
+
