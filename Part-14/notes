@@ -1,0 +1,45 @@
+Heredocs
+I use Heredocs mostly when I want to show how a script is used. There is always a sentinel, it could be any word. I normally choose to have EOF as one. You start yours Heredoc by having a sentinel at the beginning and at then end. The words between these two are used as stdin. Let's take a look a very common way of using Heredocs.
+
+
+
+usage() {
+
+	cat <<EOF
+usage: script [-r] [-v] [-w] [file ...]
+this script is used to create a text file from the output ...
+EOF
+}
+
+Herestring
+You use Herestrings to send the string as an argument.
+
+$ grep hihi <<< "When I laugh I say hihi"
+when I laugh I say hihi
+
+For simple cases Herestrings are very useful and lighter to use since the do not create a subshell. I would recommend you to use them in simple cases instead of piping i.e |.
+
+Pipes
+We already talked about FDs. We use them to write different types of output to file or to send in the content of a file as stdin to a program. Let's learn how to send outputs of one application as input the another. Have a look at one simple case.
+
+$ echo "Payam is awesome...sometimes" | grep is
+Payam is awesome...sometimes
+
+So the stdout of echo is "Payam is awesome...sometimes". That is the stdin to grep. grep then searches for the pattern/word and sends it stdout to the terminal window. One important detail about pipes is that they create a subshell and any modified variable will remain unchanged outside of it. Look here
+$ name=Payam
+$ echo 'Michelle' | read name
+$ echo "Your name is: $name"
+Your name is: Payam
+
+You see that we first create the variable "name" then we send the stdout of echo to read command as a stdin. But since the pipe created another subshell the variable is unchanged outside it. That is why we still get the same value for variable name.
+
+But what should I do then? Simple. Echo the result inside the second subshell
+$ name=Payam
+$ echo "Michelle" | { read name; echo "Your name is: $name";}
+Your name is: Michelle
+
+The semicolon is just an indication that the rest of the code is on a new line.
+
+A good script writer does not over-use pipes. Because they create a subshell each time. If you use pipes to send outputs to different applications multiple times then you have to re-think your design. Try to find another application or read the manual of the application you are using to have a smarter design.
+
+
