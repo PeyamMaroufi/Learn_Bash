@@ -1,0 +1,28 @@
+#!/bin/bash
+
+abs() {
+	if [[ $1 -ge 0 ]]; then
+		echo "$1"
+	else
+		echo "$(( -$1))"
+	fi
+}
+
+abs -10
+abs2() {
+	((value = ($1 >= 0) ? $1: -$1 ))
+	echo "$value"
+}
+
+abs2 -212
+
+print_value() {
+	local i
+	for ((i=1; i<=$1; i++)); do
+		echo "$i"
+	done
+}
+for ((i=1; i<=3; i++)); do print_value $i; done
+
+
+	

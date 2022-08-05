@@ -47,4 +47,38 @@ $ if (($a==14)); then echo "it works"; fi
 it works
 
 Functions
+To have a better control on your script you usually end up having function inside your file. They also can take arguments as the script itself takes arguments. Let's take an example
+
+abs() {
+	if [[ $1 -ge 0 ]]; then
+		echo $1
+	else
+		echo $(( -a))
+	fi
+}
+
+$ abs -1
+1
+It is also okay to have the keyword `function` in front of the function name. I usually do not do that. But if you insist on having the keyword `function` having the parentheses is optional. In the function above we are taking the absolute value of an input. You are probably familiar with ternary operators in programming languages. You can implement the same logic even in bash. Let's simplify the code above.
+
+abs() {
+	((value = ($1 >= 0) ? $1: -$1 ))
+	echo "$value"
+}
+abs -12
+12
+
+It is also a good idea to declare local variables so that you don't happen to write over other variables.
+
+print_value() {
+	local i
+	for ((i=1; i<=$1; i++)); do
+		echo "$i"
+	done
+}
+for ((i=1; i<=3; i++)); do print_value $i; done
+
+As seen above, variable outside of the function and inside of the function have the same name. Yet they don't conflict.
+
+
 
