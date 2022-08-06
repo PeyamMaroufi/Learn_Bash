@@ -1,0 +1,84 @@
+Process substitution
+Another way of sending stdout is to use Process Substitution. These are pretty rare but once you know about them they can come in handy sometimes.The forms for these are <(cmd) or >(cmd). This operation creates a temporary file or a named pipe and you can use the content of that file as input to another program. 
+
+Subshells
+A subshell is a child process with inherited information. When using pipes "|" they are implicitly created. They can also be explicitly created using parentheses around a command. What is happening between the parentheses won't affect outside of it. Let's have a look.
+
+$ pwd
+/home/maroufi
+$ (cd ~/Downloads/ || exit 1;) # exit with a non-zero exit code in case Downloads doesn't exist.
+$ pwd
+/home/maroufi
+
+You see that the effect of cd is already gone when we come to the second pwd command.
+
+Command Grouping
+As () creates a new subshell, command grouping does not. They are multiple command surrounded by curly braces {}. So since they are performing the commands in the same shell then variables and inherited information can be changed.
+
+$ { echo "Date is ${date}"; sleep 5; echo "Date now is ${date}"; } &> log
+$ cat < log
+Date is Fri 05 Aug 2022 09:03:16 PM CEST
+Date now is Fri 05 Aug 2022 09:03:21 PM CEST
+
+Arithmetic Evaluation
+There are multiple ways of performing arithmetic evaluations. You could either use the `let` command. 
+$ x=10+1
+$ echo $x
+10+1
+$ let x=10+1
+$ echo $x
+11
+
+You can combine let with parentheses or quotes if you prefer that.
+$ let x='10+1'
+$ echo $x
+11
+
+The common way of arithmetic evaluation is to use double parentheses.
+$ ((a=(10+4)))
+$ echo $a
+14
+$ lastlecture=14
+$ echo "This lecture's number is $((++lastlecture))."
+This lecture's number is 15
+
+(( )) is also use in if statements to compare numerical values.
+$ if (($a==14)); then echo "it works"; fi
+it works
+
+Functions
+To have a better control on your script you usually end up having function inside your file. They also can take arguments as the script itself takes arguments. Let's take an example
+
+abs() {
+	if [[ $1 -ge 0 ]]; then
+		echo $1
+	else
+		echo $(( -a))
+	fi
+}
+
+$ abs -1
+1
+It is also okay to have the keyword `function` in front of the function name. I usually do not do that. But if you insist on having the keyword `function` having the parentheses is optional. In the function above we are taking the absolute value of an input. You are probably familiar with ternary operators in programming languages. You can implement the same logic even in bash. Let's simplify the code above.
+
+abs() {
+	((value = ($1 >= 0) ? $1: -$1 ))
+	echo "$value"
+}
+abs -12
+12
+
+It is also a good idea to declare local variables so that you don't happen to write over other variables.
+
+print_value() {
+	local i
+	for ((i=1; i<=$1; i++)); do
+		echo "$i"
+	done
+}
+for ((i=1; i<=3; i++)); do print_value $i; done
+
+As seen above, variable outside of the function and inside of the function have the same name. Yet they don't conflict.
+
+
+
