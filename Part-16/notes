@@ -1,0 +1,37 @@
+Aliases
+So earlier we talked about function, They can be called with or without arguments. Aliases can seem like functions but:
+* They do not work in scripts.
+* No argument can be sent to them.
+* Can not be invoked recursively.
+* No local variables inside them.
+
+Take a look of your ~/.bashrc file. In the middle or end of the file you probably see some aliases. Some of them could also be commented. In my ~/.bashrc I see:
+
+# some more ls aliases
+#alias ll='ls -l'
+#alias la='ls -A'
+#alias l='ls -CF'
+
+These are aliases than can be un-commented and used. But for changes to take place you need to reload your .bashrc file.
+$ . ~/.bashrc # or source ~/.bashrc
+
+I save my own aliases in a file called "~/.bash_aliases".
+# Git Aliases
+alias gittar='git status'
+alias commit='git commit -m '
+alias gpush='git push'
+alias gadd='git add'
+alias amend='git commit --amend'
+alias newbranch='git checkout -b '
+alias pushbranch='git push --set-upstream origin '
+
+You can also have functions in your ~/.bashrc or unalias an alias. Some of the aliases above could be functions but I don't mind having them this way.
+
+Removing functions from current shell
+Use the unset command.
+$ unset -f my_function
+$ unset -v 'my_array[3]' # Exercise: What would happen without quoting?
+
+Sourcing
+
+
