@@ -33,5 +33,4 @@ $ unset -f my_function
 $ unset -v 'my_array[3]' # Exercise: What would happen without quoting?
 
 Sourcing
-
-
+When you call a script from another one, the new script inherits the environment of the original script. That is very important to know.
