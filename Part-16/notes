@@ -33,4 +33,42 @@ $ unset -f my_function
 $ unset -v 'my_array[3]' # Exercise: What would happen without quoting?
 
 Sourcing
-When you call a script from another one, the new script inherits the environment of the original script. That is very important to know.
+When you call a script from another one, the new script inherits the environment of the original script. That is very important to know. By environment we mean the current folder, opened files and variables. If you want to see them use the Export command, printenv or set or whatever method you want. Let me give you an example. Let's see that you want to write a script in which you want to change directory or set a variable, then you want the directory to be changed or the variable is set even when the script is finished. Instead of running it as a child, try to source it with a . or use the other name of the dot i.e. source.
+
+Job Control
+This is actually one of the most important topic in my experience. Job control gives you the ability to interactively handle the background jobs, suspend foreground jobs etc. Each tty (terminal) has a single process group. All the process group can be either running or suspended.
+
+Job control can be turned on in scripts with set -m or set -o monitor. A foreground job can be suspended with Ctrl-Z. Job control enables the following commands:
+
+* fg : bring a background job to foreground.
+* bg : run a suspended job in the background.
+* suspend : suspend the shell.
+* job : list the suspended and background jobs.
+* kill: can take a jobspec instead of ID.
+* disown: tells bash to forget about an existing job.
+
+Running jobs in background
+You can use & sign to send them to background.
+
+command one & command two & command three &
+or 
+
+for i in one two three;
+	do	command "$a" &
+	echo $!		# gives you the jobid
+done
+
+Good Practices
+1) Choose a good shell that you are comfortable with
+2) Don't forget Quoting. This is the most common reason bugs and errors
+3) Choose a Terminal you are comfortable with. I run terminator
+4) Learn globbing. It really helps you
+5) Write a clean code. Do not try to impress. Readability is the key in any programming language. However write a code that is smooth and runs as fast as possible.
+6) Use [[ instead of [
+7) Don't use `ls` in loops
+8) Don't use cat with grep. It is redundant and just wrong.
+9) Don't use expr. 
+10) If you are a IRCer use #bash on irc.libera.chat
+
+
+
